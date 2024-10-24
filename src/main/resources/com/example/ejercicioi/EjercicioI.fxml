@@ -31,8 +31,8 @@
          <contextMenu>
             <ContextMenu id="cmOpciones">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#abrirVentanaAgregar" text="Modificar" />
-                  <MenuItem mnemonicParsing="false" text="Eliminar" />
+                <MenuItem mnemonicParsing="false" onAction="#manejarMenuContextual" text="Modificar" />
+                  <MenuItem mnemonicParsing="false" onAction="#manejarMenuContextual" text="Eliminar" />
               </items>
             </ContextMenu>
          </contextMenu>
