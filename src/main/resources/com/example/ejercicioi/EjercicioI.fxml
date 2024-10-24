@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -15,6 +16,7 @@
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="577.0" spacing="30.0">
          <children>
+            <ImageView fx:id="imagenPersonas" fitHeight="101.0" fitWidth="131.0" pickOnBounds="true" preserveRatio="true" />
             <Label text="Filtrar por nombre:" />
             <TextField fx:id="filtrarField" onAction="#filtrar" />
          </children>

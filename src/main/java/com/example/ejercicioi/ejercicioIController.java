@@ -10,12 +10,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 public class ejercicioIController {
 
@@ -43,6 +46,9 @@ public class ejercicioIController {
     @FXML
     private Button eliminarButton;
 
+    @FXML
+    private ImageView imagenPersonas;
+
     private ObservableList<Persona> personasList = FXCollections.observableArrayList();
     private DaoPersona daoPersona = new DaoPersona();
 
@@ -53,6 +59,14 @@ public class ejercicioIController {
         edadColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getEdad()).asObject());
 
         cargarPersonasDesdeBD();
+
+        agregarButton.setTooltip(new Tooltip("Agregar una nueva persona"));
+        modificarButton.setTooltip(new Tooltip("Modificar una persona"));
+        eliminarButton.setTooltip(new Tooltip("Eliminar una persona"));
+        filtrarField.setTooltip(new Tooltip("Filtrar personas por su nombre"));
+
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/contactos.jpeg")));
+        imagenPersonas.setImage(image);
     }
 
     private void cargarPersonasDesdeBD() {
