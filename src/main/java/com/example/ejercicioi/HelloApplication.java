@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Clase principal de la aplicación que extiende la clase {@link Application}.
@@ -25,7 +26,8 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("EjercicioI.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 500);
-        Image icon = new Image(getClass().getResourceAsStream("/iconos/cuaderno.png"));
+        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/cuaderno.png")));
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/estilos/styles.css")).toExternalForm());
         stage.getIcons().add(icon);
         stage.setMaxWidth(840);
         stage.setMinWidth(565);

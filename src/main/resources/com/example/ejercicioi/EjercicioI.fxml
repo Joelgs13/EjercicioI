@@ -12,7 +12,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="597.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ejercicioi.ejercicioIController">
+<VBox prefHeight="400.0" prefWidth="597.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ejercicioi.ejercicioIController" stylesheets="@../../../estilos/styles.css">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="577.0" spacing="30.0">
          <children>
@@ -32,10 +33,10 @@
          </columnResizePolicy>
          <contextMenu>
             <ContextMenu id="cmOpciones">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#manejarMenuContextual" text="Modificar" />
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#manejarMenuContextual" text="Modificar" />
                   <MenuItem mnemonicParsing="false" onAction="#manejarMenuContextual" text="Eliminar" />
-              </items>
+               </items>
             </ContextMenu>
          </contextMenu>
       </TableView>

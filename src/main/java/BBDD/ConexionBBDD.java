@@ -1,5 +1,7 @@
 package BBDD;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -71,6 +73,22 @@ public class ConexionBBDD {
      */
     public Connection CloseConexion() throws SQLException {
         connection.close(); // Cierra la conexión
-        return connection;   // Retorna la conexión cerrada (opcional)
+        return connection;
+    }
+
+    /**
+     * Carga las propiedades del archivo db.properties.
+     *
+     * @return the properties
+     */
+    public static Properties loadProperties() {
+        try (FileInputStream fs = new FileInputStream("db.properties")) {
+            Properties props = new Properties();
+            props.load(fs);
+            return props;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
