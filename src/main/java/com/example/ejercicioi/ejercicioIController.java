@@ -14,8 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -27,7 +25,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ejercicioIController {
-
 
     @FXML
     private ImageView ivMas;
@@ -65,12 +62,16 @@ public class ejercicioIController {
     @FXML
     private ImageView imagenPersonas;
 
+    @FXML
+    private Label filterLabel;  // Añadido para el label del filtro
+
+    @FXML
+    private MenuItem modifyMenuItem, deleteMenuItem; // Añadido para los items del menú contextual
+
     private ObservableList<Persona> personasList = FXCollections.observableArrayList();
     private DaoPersona daoPersona = new DaoPersona();
 
-
     private ResourceBundle bundle;
-
 
     @FXML
     public void initialize() {
@@ -79,12 +80,13 @@ public class ejercicioIController {
         edadColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getEdad()).asObject());
 
         cargarPersonasDesdeBD();
-        //tooltips
+        // tooltips
         agregarButton.setTooltip(new Tooltip("Agregar una nueva persona"));
         modificarButton.setTooltip(new Tooltip("Modificar una persona"));
         eliminarButton.setTooltip(new Tooltip("Eliminar una persona"));
         filtrarField.setTooltip(new Tooltip("Filtrar personas por su nombre"));
-        //imagenes
+
+        // Cargar imágenes
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/contactos.jpeg")));
         imagenPersonas.setImage(image);
         Image image2 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/mas.png")));
@@ -93,8 +95,9 @@ public class ejercicioIController {
         ivEditar.setImage(image3);
         Image image4 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/menos.png")));
         ivMenos.setImage(image4);
-        //multiidioma
-        Locale locale = new Locale("en"); // Cambiar aquí según el idioma deseado
+
+        // Inicializar multidioma
+        Locale locale = new Locale("eu");
         bundle = ResourceBundle.getBundle("properties.lang", locale);
 
         // Aplicar traducciones
@@ -105,7 +108,14 @@ public class ejercicioIController {
         agregarButton.setText(bundle.getString("add_person"));
         modificarButton.setText(bundle.getString("modify_person"));
         eliminarButton.setText(bundle.getString("delete_person"));
-        // Aquí puedes actualizar otros elementos de la UI usando el ResourceBundle.
+        filterLabel.setText(bundle.getString("filter_by_name"));
+
+        nombreColumn.setText(bundle.getString("name"));
+        apellidosColumn.setText(bundle.getString("surname"));
+        edadColumn.setText(bundle.getString("age"));
+
+        modifyMenuItem.setText(bundle.getString("modify"));
+        deleteMenuItem.setText(bundle.getString("delete"));
     }
 
     private void cargarPersonasDesdeBD() {
@@ -124,30 +134,10 @@ public class ejercicioIController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ejercicioi/ejercicioImodal.fxml"));
             Parent modalRoot = loader.load();
             Stage modalStage = new Stage();
-            modalStage.initModality(Modality.WINDOW_MODAL);
-            modalStage.initOwner(agregarButton.getScene().getWindow());
-
-            ejercicioIModalController modalController = loader.getController();
-            modalController.setPersonasList(personasList);
-            modalController.setDaoPersona(daoPersona);
-
-            if (event.getSource() == agregarButton) {
-                modalStage.setTitle("Agregar Persona");
-            } else if (event.getSource() == modificarButton || event.getSource() instanceof MenuItem) {
-                Persona personaSeleccionada = personTable.getSelectionModel().getSelectedItem();
-                if (personaSeleccionada == null) {
-                    mostrarAlerta("No hay ninguna persona seleccionada", "Por favor, seleccione una persona para editar.");
-                    return;
-                }
-                modalStage.setTitle("Editar Persona");
-                modalController.setPersonaAEditar(personaSeleccionada);
-            }
-
+            modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.setScene(new Scene(modalRoot));
             modalStage.showAndWait();
-
             cargarPersonasDesdeBD();
-
         } catch (IOException e) {
             mostrarAlerta("Error", "No se pudo abrir la ventana: " + e.getMessage());
         }
@@ -156,48 +146,49 @@ public class ejercicioIController {
     @FXML
     private void eliminarPersona(ActionEvent event) {
         Persona personaSeleccionada = personTable.getSelectionModel().getSelectedItem();
-        if (personaSeleccionada == null) {
-            mostrarAlerta("No hay ninguna persona seleccionada", "Por favor, seleccione una persona para eliminar.");
-        } else {
+        if (personaSeleccionada != null) {
             try {
                 daoPersona.eliminar(personaSeleccionada.getId());
                 personasList.remove(personaSeleccionada);
-                mostrarAlerta("Persona eliminada", "La persona ha sido eliminada con éxito.");
             } catch (SQLException e) {
                 mostrarAlerta("Error", "No se pudo eliminar la persona: " + e.getMessage());
             }
-        }
-    }
-
-    // Nuevo método para manejar acciones del menú contextual
-    @FXML
-    private void manejarMenuContextual(ActionEvent event) {
-        MenuItem menuItem = (MenuItem) event.getSource();
-        if ("Modificar".equals(menuItem.getText())) {
-            abrirVentanaAgregar(new ActionEvent(modificarButton, null));
-        } else if ("Eliminar".equals(menuItem.getText())) {
-            eliminarPersona(new ActionEvent(eliminarButton, null));
+        } else {
+            mostrarAlerta("Advertencia", "Seleccione una persona para eliminar.");
         }
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 
-    public void filtrar() {
-        String textoFiltro = filtrarField.getText().toLowerCase();
-        ObservableList<Persona> personasFiltradas = FXCollections.observableArrayList();
-
-        for (Persona persona : personasList) {
-            if (persona.getNombre().toLowerCase().contains(textoFiltro)) {
-                personasFiltradas.add(persona);
-            }
+    @FXML
+    private void manejarMenuContextual(ActionEvent event) {
+        MenuItem menuItem = (MenuItem) event.getSource();
+        if (menuItem == modifyMenuItem) {
+            abrirVentanaAgregar(event); // reutilizar el método
+        } else if (menuItem == deleteMenuItem) {
+            eliminarPersona(event);
         }
+    }
 
-        personTable.setItems(personasFiltradas);
+    @FXML
+    private void filtrar(ActionEvent event) {
+        String filtro = filtrarField.getText().toLowerCase();
+        if (!filtro.isEmpty()) {
+            ObservableList<Persona> filtrado = FXCollections.observableArrayList();
+            for (Persona persona : personasList) {
+                if (persona.getNombre().toLowerCase().contains(filtro)) {
+                    filtrado.add(persona);
+                }
+            }
+            personTable.setItems(filtrado);
+        } else {
+            personTable.setItems(personasList);
+        }
     }
 }
