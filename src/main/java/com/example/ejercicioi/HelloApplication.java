@@ -37,6 +37,7 @@ public class HelloApplication extends Application {
         stage.setTitle("Ejercicio I!");
         stage.setScene(scene);
         stage.show();
+
     }
 
     /**
