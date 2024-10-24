@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -21,6 +22,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class ejercicioIController {
+    @FXML
+    private ImageView ivMas;
+
+    @FXML
+    private ImageView ivEditar;
+
+    @FXML
+    private ImageView ivMenos;
 
     @FXML
     private TableView<Persona> personTable;
@@ -67,6 +76,12 @@ public class ejercicioIController {
 
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/contactos.jpeg")));
         imagenPersonas.setImage(image);
+        Image image2 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/mas.png")));
+        ivMas.setImage(image2);
+        Image image3 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/editar.png")));
+        ivEditar.setImage(image3);
+        Image image4 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/menos.png")));
+        ivMenos.setImage(image4);
     }
 
     private void cargarPersonasDesdeBD() {
