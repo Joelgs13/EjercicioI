@@ -22,7 +22,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class ejercicioIController {
 
@@ -66,6 +68,10 @@ public class ejercicioIController {
     private ObservableList<Persona> personasList = FXCollections.observableArrayList();
     private DaoPersona daoPersona = new DaoPersona();
 
+
+    private ResourceBundle bundle;
+
+
     @FXML
     public void initialize() {
         nombreColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
@@ -73,12 +79,12 @@ public class ejercicioIController {
         edadColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getEdad()).asObject());
 
         cargarPersonasDesdeBD();
-
+        //tooltips
         agregarButton.setTooltip(new Tooltip("Agregar una nueva persona"));
         modificarButton.setTooltip(new Tooltip("Modificar una persona"));
         eliminarButton.setTooltip(new Tooltip("Eliminar una persona"));
         filtrarField.setTooltip(new Tooltip("Filtrar personas por su nombre"));
-
+        //imagenes
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/contactos.jpeg")));
         imagenPersonas.setImage(image);
         Image image2 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/mas.png")));
@@ -87,7 +93,19 @@ public class ejercicioIController {
         ivEditar.setImage(image3);
         Image image4 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/menos.png")));
         ivMenos.setImage(image4);
+        //multiidioma
+        Locale locale = new Locale("en"); // Cambiar aquí según el idioma deseado
+        bundle = ResourceBundle.getBundle("properties.lang", locale);
 
+        // Aplicar traducciones
+        updateUI();
+    }
+
+    private void updateUI() {
+        agregarButton.setText(bundle.getString("add_person"));
+        modificarButton.setText(bundle.getString("modify_person"));
+        eliminarButton.setText(bundle.getString("delete_person"));
+        // Aquí puedes actualizar otros elementos de la UI usando el ResourceBundle.
     }
 
     private void cargarPersonasDesdeBD() {
