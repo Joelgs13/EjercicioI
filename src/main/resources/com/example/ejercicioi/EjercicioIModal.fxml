@@ -9,7 +9,7 @@
 
 <VBox alignment="CENTER_LEFT" prefHeight="270.0" prefWidth="494.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ejercicioi.ejercicioIModalController">
    <children>
-      <Label text="Nombre:" VBox.vgrow="ALWAYS">
+      <Label fx:id="labelNombre" text="Nombre:" VBox.vgrow="ALWAYS">
          <padding>
             <Insets bottom="10.0" />
          </padding>
@@ -19,7 +19,7 @@
             <Insets bottom="10.0" />
          </VBox.margin>
       </TextField>
-      <Label text="Apellidos:" VBox.vgrow="ALWAYS">
+      <Label fx:id="labelApellidos" text="Apellidos:" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets bottom="10.0" />
          </VBox.margin>
@@ -29,7 +29,7 @@
             <Insets bottom="10.0" />
          </VBox.margin>
       </TextField>
-      <Label text="Edad:" VBox.vgrow="ALWAYS">
+      <Label fx:id="labelEdad" text="Edad:" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets bottom="10.0" />
          </VBox.margin>
@@ -45,7 +45,7 @@
       <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="464.0" spacing="100.0">
          <children>
             <Button fx:id="agregarButton" mnemonicParsing="false" onAction="#aniadirPersona" text="Guardar" />
-            <Button mnemonicParsing="false" onAction="#cerrarVentana" text="Cancelar" />
+            <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cerrarVentana" text="Cancelar" />
          </children>
       </HBox>
    </children>

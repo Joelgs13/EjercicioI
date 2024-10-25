@@ -1,31 +1,37 @@
 /* Estilo para el fondo de la ventana */
 .root {
-    -fx-background-color: #d3d3d3; /* Color de fondo gris clarito para la ventana */
+    -fx-background-color: #d3d3d3; /* Color de fondo gris claro */
+    -fx-font-family: "Arial"; /* Fuente general */
+    -fx-font-size: 14px; /* Tamaño de la fuente general */
 }
 
 /* Estilo para el TableView */
 .table-view {
-    -fx-background-color: #808080; /* Fondo gris para la tabla */
+    -fx-background-color: #c0c0c0; /* Fondo gris claro para la tabla */
     -fx-border-color: cyan; /* Borde cian para la tabla */
     -fx-border-width: 2px; /* Ancho del borde */
 }
 
 /* Estilo para las celdas de la tabla */
 .table-view .table-row-cell {
-    -fx-background-color: #808080; /* Color de fondo gris para las filas */
-    -fx-text-fill: black; /* Texto blanco en las celdas */
+    -fx-background-color: #e6e6e6; /* Color de fondo gris muy claro */
+    -fx-text-fill: black; /* Texto negro en las celdas */
 }
 
 /* Estilo para las celdas seleccionadas */
 .table-view .table-row-cell:selected {
     -fx-background-color: #00FFFF; /* Color de fondo cian para la selección */
-    -fx-text-fill: #ffffff; /* Texto negro en la fila seleccionada */
+    -fx-text-fill: black; /* Texto negro en la fila seleccionada */
 }
 
 /* Estilo para los encabezados de la tabla */
-.table-view .column-header {
-    -fx-background-color: #333333; /* Color de fondo gris oscuro para los encabezados */
-    -fx-text-fill: white; /* Color del texto de los encabezados */
+.table-view .column-header-background {
+    -fx-background-color: #333333; /* Fondo gris oscuro para los encabezados */
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: black; /* Texto blanco para los encabezados */
+    -fx-font-weight: bold; /* Texto en negrita para mayor visibilidad */
 }
 
 /* Estilo para los botones */
@@ -44,25 +50,19 @@
 
 /* Estilo para los campos de texto */
 .text-field {
-    -fx-background-color: #000000; /* Fondo blanco */
-    -fx-text-fill: #ffffff;
+    -fx-background-color: #000000; /* Fondo negro */
+    -fx-text-fill: #ffffff; /* Texto blanco */
     -fx-border-color: #a9a9a9; /* Borde gris */
     -fx-border-radius: 5; /* Bordes redondeados */
 }
 
-/* Color del texto en los campos de texto */
+/* Estilo para el texto dentro de los campos de texto */
 .text-field .text {
-    -fx-fill: black; /* Color del texto en negro */
+    -fx-fill: #ffffff; /* Texto blanco */
 }
 
 /* Estilo para las etiquetas */
 .label {
     -fx-text-fill: #333333; /* Color del texto en gris oscuro */
     -fx-font-size: 14px; /* Tamaño de la fuente */
-}
-
-/* Estilo general de la interfaz */
-.root {
-    -fx-font-family: "Arial"; /* Fuente general */
-    -fx-font-size: 14px; /* Tamaño de la fuente general */
 }

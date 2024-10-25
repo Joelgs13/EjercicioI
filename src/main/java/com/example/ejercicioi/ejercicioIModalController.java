@@ -5,12 +5,29 @@ import Model.Persona;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 public class ejercicioIModalController {
+    @FXML
+    public Label labelApellidos;
+
+    @FXML
+    public Label labelNombre;
+
+    @FXML
+    public Label labelEdad;
+
+    @FXML
+    public Button agregarButton;
+
+    @FXML
+    public Button cancelarButton;
 
     @FXML
     private TextField nombreField;
@@ -25,6 +42,23 @@ public class ejercicioIModalController {
     private Persona personaAEditar = null;
     private DaoPersona daoPersona;
     private boolean esModificacion = false;
+
+
+    private static ResourceBundle bundle;
+
+    public void setBundle(ResourceBundle bundle) {
+        ejercicioIModalController.bundle = bundle;
+        updateUI();
+    }
+
+    private void updateUI() {
+        // Ejemplo: cambiar título del campo según el idioma
+        labelApellidos.setText(bundle.getString("surname"));
+        labelNombre.setText(bundle.getString("name"));
+        labelEdad.setText(bundle.getString("age"));
+        agregarButton.setText(bundle.getString("save"));
+        cancelarButton.setText(bundle.getString("delete"));
+    }
 
     public void setPersonasList(ObservableList<Persona> personasList) {
         this.personasList = personasList;

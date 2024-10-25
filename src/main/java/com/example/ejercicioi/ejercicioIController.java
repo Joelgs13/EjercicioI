@@ -14,15 +14,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -66,15 +63,27 @@ public class ejercicioIController {
     @FXML
     private ImageView imagenPersonas;
 
+    @FXML
+    private MenuItem miModificar;
+
+    @FXML
+    private MenuItem miEliminar;
+
     private ObservableList<Persona> personasList = FXCollections.observableArrayList();
     private DaoPersona daoPersona = new DaoPersona();
 
-
+    @FXML
     private ResourceBundle bundle;
 
 
     @FXML
     public void initialize() {
+        // Obtener el ResourceBundle del FXMLLoader automáticamente
+        bundle = HelloApplication.getBundle();
+
+        // Configurar la interfaz
+        updateUI();
+        cargarPersonasDesdeBD();
         nombreColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
         apellidosColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getApellido()));
         edadColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getEdad()).asObject());
@@ -85,6 +94,9 @@ public class ejercicioIController {
         modificarButton.setTooltip(new Tooltip("Modificar una persona"));
         eliminarButton.setTooltip(new Tooltip("Eliminar una persona"));
         filtrarField.setTooltip(new Tooltip("Filtrar personas por su nombre"));
+
+
+
         //imagenes
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/contactos.jpeg")));
         imagenPersonas.setImage(image);
@@ -94,9 +106,6 @@ public class ejercicioIController {
         ivEditar.setImage(image3);
         Image image4 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/menos.png")));
         ivMenos.setImage(image4);
-        //multiidioma
-        Locale locale = new Locale("eu"); // Cambiar aquí según el idioma deseado
-        bundle = ResourceBundle.getBundle("properties.lang", locale);
 
         // Aplicar traducciones
         updateUI();
@@ -107,6 +116,8 @@ public class ejercicioIController {
         modificarButton.setText(bundle.getString("modify_person"));
         eliminarButton.setText(bundle.getString("delete_person"));
         filtrarLabel.setText(bundle.getString("filter_by_name"));
+        miModificar.setText(bundle.getString("modify_person"));
+        miEliminar.setText(bundle.getString("delete_person"));
         // Aquí puedes actualizar otros elementos de la UI usando el ResourceBundle.
     }
 
@@ -124,12 +135,21 @@ public class ejercicioIController {
     private void abrirVentanaAgregar(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ejercicioi/ejercicioImodal.fxml"));
+            loader.setResources(bundle);  // Pasar el ResourceBundle al modal
+
             Parent modalRoot = loader.load();
+            ejercicioIModalController modalController = loader.getController();
+
+            // Pasar el ResourceBundle al modal
+            modalController.setBundle(bundle);
+
+
             Stage modalStage = new Stage();
+            modalStage.setResizable(false);
             modalStage.initModality(Modality.WINDOW_MODAL);
             modalStage.initOwner(agregarButton.getScene().getWindow());
 
-            ejercicioIModalController modalController = loader.getController();
+            modalController = loader.getController();
             modalController.setPersonasList(personasList);
             modalController.setDaoPersona(daoPersona);
 

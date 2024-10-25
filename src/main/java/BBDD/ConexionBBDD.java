@@ -82,7 +82,7 @@ public class ConexionBBDD {
      * @return the properties
      */
     public static Properties loadProperties() {
-        try (FileInputStream fs = new FileInputStream("db.properties")) {
+        try (FileInputStream fs = new FileInputStream("bbdd.properties")) {
             Properties props = new Properties();
             props.load(fs);
             return props;
