@@ -10,8 +10,9 @@ import java.util.Properties;
 
 /**
  * Clase para gestionar la conexión a la base de datos MariaDB.
- * Esta clase es responsable de establecer, mantener y cerrar
- * la conexión con la base de datos especificada.
+ * Es responsable de establecer, mantener y cerrar la conexión
+ * con la base de datos, y de cargar las configuraciones necesarias
+ * desde un archivo de propiedades.
  */
 public class ConexionBBDD {
 
@@ -20,13 +21,13 @@ public class ConexionBBDD {
 
     /**
      * Constructor que establece la conexión con la base de datos.
-     * Configura las propiedades de usuario y contraseña, y
-     * realiza la conexión a la base de datos MariaDB en la dirección
-     * y parámetros especificados.
+     * Carga las propiedades de usuario y contraseña desde el archivo
+     * de configuración `bbdd.properties` y establece la conexión
+     * a la base de datos MariaDB usando los parámetros especificados.
      *
      * @throws SQLException si ocurre un error al establecer la conexión
-     *                     (por ejemplo, si la base de datos no está disponible
-     *                     o las credenciales son incorrectas).
+     *                      (por ejemplo, si la base de datos no está disponible
+     *                      o las credenciales son incorrectas).
      */
     public ConexionBBDD() throws SQLException {
         Properties connConfig = new Properties();
@@ -40,24 +41,14 @@ public class ConexionBBDD {
         );
         connection.setAutoCommit(true); // Configura el modo de autocommit para la conexión
 
-        // Obtener información sobre la base de datos para fines de depuración
+        // Información de la base de datos (opcional para depuración)
         DatabaseMetaData databaseMetaData = connection.getMetaData();
-        /*
-         System.out.println();
-         System.out.println("--- Datos de conexión ------------------------------------------");
-         System.out.printf("Base de datos: %s%n", databaseMetaData.getDatabaseProductName());
-         System.out.printf("  Versión: %s%n", databaseMetaData.getDatabaseProductVersion());
-         System.out.printf("Driver: %s%n", databaseMetaData.getDriverName());
-         System.out.printf("  Versión: %s%n", databaseMetaData.getDriverVersion());
-         System.out.println("----------------------------------------------------------------");
-         System.out.println();
-         */
     }
 
     /**
      * Devuelve la conexión activa a la base de datos.
      *
-     * @return la conexión activa a la base de datos
+     * @return La conexión activa a la base de datos.
      */
     public Connection getConnection() {
         return connection;
@@ -66,10 +57,9 @@ public class ConexionBBDD {
     /**
      * Cierra la conexión activa con la base de datos.
      *
-     * @return la conexión cerrada (si es necesario para otros procesos,
-     *         aunque generalmente no se devuelve un objeto cerrado)
+     * @return La conexión cerrada, útil en otros procesos si se requiere.
      * @throws SQLException si ocurre un error al cerrar la conexión,
-     *                     por ejemplo, si la conexión ya está cerrada.
+     *                      por ejemplo, si la conexión ya está cerrada.
      */
     public Connection CloseConexion() throws SQLException {
         connection.close(); // Cierra la conexión
@@ -77,9 +67,12 @@ public class ConexionBBDD {
     }
 
     /**
-     * Carga las propiedades del archivo db.properties.
+     * Carga las propiedades de configuración desde el archivo `bbdd.properties`.
+     * Este archivo debe contener la configuración de idioma u otras configuraciones
+     * necesarias para la base de datos.
      *
-     * @return the properties
+     * @return Un objeto {@link Properties} con las configuraciones cargadas, o
+     *         {@code null} si ocurre un error al leer el archivo.
      */
     public static Properties loadProperties() {
         try (FileInputStream fs = new FileInputStream("bbdd.properties")) {

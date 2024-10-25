@@ -23,94 +23,67 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controlador principal de la aplicación que maneja la interfaz gráfica
+ * y las interacciones con el usuario en el TableView de personas.
+ */
 public class ejercicioIController {
-    @FXML
-    private Label filtrarLabel;
 
-    @FXML
-    private ImageView ivMas;
-
-    @FXML
-    private ImageView ivEditar;
-
-    @FXML
-    private ImageView ivMenos;
-
-    @FXML
-    private TableView<Persona> personTable;
-
-    @FXML
-    private TextField filtrarField;
-
-    @FXML
-    private TableColumn<Persona, String> nombreColumn;
-
-    @FXML
-    private TableColumn<Persona, String> apellidosColumn;
-
-    @FXML
-    private TableColumn<Persona, Integer> edadColumn;
-
-    @FXML
-    private Button agregarButton;
-
-    @FXML
-    private Button modificarButton;
-
-    @FXML
-    private Button eliminarButton;
-
-    @FXML
-    private ImageView imagenPersonas;
-
-    @FXML
-    private MenuItem miModificar;
-
-    @FXML
-    private MenuItem miEliminar;
-
+    @FXML private Label filtrarLabel;
+    @FXML private ImageView ivMas;
+    @FXML private ImageView ivEditar;
+    @FXML private ImageView ivMenos;
+    @FXML private TableView<Persona> personTable;
+    @FXML private TextField filtrarField;
+    @FXML private TableColumn<Persona, String> nombreColumn;
+    @FXML private TableColumn<Persona, String> apellidosColumn;
+    @FXML private TableColumn<Persona, Integer> edadColumn;
+    @FXML private Button agregarButton;
+    @FXML private Button modificarButton;
+    @FXML private Button eliminarButton;
+    @FXML private ImageView imagenPersonas;
+    @FXML private MenuItem miModificar;
+    @FXML private MenuItem miEliminar;
     private ObservableList<Persona> personasList = FXCollections.observableArrayList();
     private DaoPersona daoPersona = new DaoPersona();
+    @FXML private ResourceBundle bundle;
 
-    @FXML
-    private ResourceBundle bundle;
-
-
+    /**
+     * Método de inicialización que configura los elementos de la interfaz
+     * y carga las personas desde la base de datos al iniciar la aplicación.
+     * También aplica el ResourceBundle para traducciones y configura
+     * los tooltips y las imágenes para los botones.
+     */
     @FXML
     public void initialize() {
-        // Obtener el ResourceBundle del FXMLLoader automáticamente
         bundle = HelloApplication.getBundle();
-
-        // Configurar la interfaz
         updateUI();
         cargarPersonasDesdeBD();
+
+        // Configuración de columnas
         nombreColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
         apellidosColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getApellido()));
         edadColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getEdad()).asObject());
 
-        cargarPersonasDesdeBD();
-        //tooltips
+        // Tooltips para los botones
         agregarButton.setTooltip(new Tooltip("Agregar una nueva persona"));
         modificarButton.setTooltip(new Tooltip("Modificar una persona"));
         eliminarButton.setTooltip(new Tooltip("Eliminar una persona"));
         filtrarField.setTooltip(new Tooltip("Filtrar personas por su nombre"));
 
+        // Configuración de imágenes en botones
+        imagenPersonas.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/contactos.jpeg"))));
+        ivMas.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/mas.png"))));
+        ivEditar.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/editar.png"))));
+        ivMenos.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/menos.png"))));
 
-
-        //imagenes
-        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/contactos.jpeg")));
-        imagenPersonas.setImage(image);
-        Image image2 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/mas.png")));
-        ivMas.setImage(image2);
-        Image image3 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/editar.png")));
-        ivEditar.setImage(image3);
-        Image image4 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/menos.png")));
-        ivMenos.setImage(image4);
-
-        // Aplicar traducciones
-        updateUI();
+        updateUI();  // Aplicar traducciones
     }
 
+    /**
+     * Actualiza los textos de la interfaz utilizando el ResourceBundle
+     * para adaptarse a configuraciones de idioma.
+     */
     private void updateUI() {
         agregarButton.setText(bundle.getString("add_person"));
         modificarButton.setText(bundle.getString("modify_person"));
@@ -118,9 +91,12 @@ public class ejercicioIController {
         filtrarLabel.setText(bundle.getString("filter_by_name"));
         miModificar.setText(bundle.getString("modify_person"));
         miEliminar.setText(bundle.getString("delete_person"));
-        // Aquí puedes actualizar otros elementos de la UI usando el ResourceBundle.
     }
 
+    /**
+     * Carga todas las personas desde la base de datos utilizando el DaoPersona
+     * y actualiza la lista observable para reflejar los datos en el TableView.
+     */
     private void cargarPersonasDesdeBD() {
         try {
             List<Persona> personas = daoPersona.obtenerTodas();
@@ -131,27 +107,29 @@ public class ejercicioIController {
         }
     }
 
+    /**
+     * Abre una ventana modal para agregar o modificar una persona.
+     * Si se llama desde el botón de agregar, abre la ventana en modo de adición.
+     * Si se llama desde el botón de modificar o el menú contextual, abre en modo edición.
+     *
+     * @param event Evento de acción que puede ser de agregar o modificar.
+     */
     @FXML
     private void abrirVentanaAgregar(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ejercicioi/ejercicioImodal.fxml"));
-            loader.setResources(bundle);  // Pasar el ResourceBundle al modal
-
+            loader.setResources(bundle);
             Parent modalRoot = loader.load();
+
             ejercicioIModalController modalController = loader.getController();
-
-            // Pasar el ResourceBundle al modal
             modalController.setBundle(bundle);
-
+            modalController.setPersonasList(personasList);
+            modalController.setDaoPersona(daoPersona);
 
             Stage modalStage = new Stage();
             modalStage.setResizable(false);
             modalStage.initModality(Modality.WINDOW_MODAL);
             modalStage.initOwner(agregarButton.getScene().getWindow());
-
-            modalController = loader.getController();
-            modalController.setPersonasList(personasList);
-            modalController.setDaoPersona(daoPersona);
 
             if (event.getSource() == agregarButton) {
                 modalStage.setTitle("Agregar Persona");
@@ -175,6 +153,13 @@ public class ejercicioIController {
         }
     }
 
+    /**
+     * Elimina la persona seleccionada en el TableView. Muestra una alerta
+     * si no hay ninguna persona seleccionada o si ocurre un error durante
+     * el proceso de eliminación.
+     *
+     * @param event Evento de acción que puede ser de eliminar.
+     */
     @FXML
     private void eliminarPersona(ActionEvent event) {
         Persona personaSeleccionada = personTable.getSelectionModel().getSelectedItem();
@@ -191,7 +176,12 @@ public class ejercicioIController {
         }
     }
 
-    // Nuevo método para manejar acciones del menú contextual
+    /**
+     * Maneja las acciones de modificar y eliminar del menú contextual,
+     * llamando a los métodos correspondientes según la acción seleccionada.
+     *
+     * @param event Evento de acción del menú contextual.
+     */
     @FXML
     private void manejarMenuContextual(ActionEvent event) {
         MenuItem menuItem = (MenuItem) event.getSource();
@@ -202,6 +192,12 @@ public class ejercicioIController {
         }
     }
 
+    /**
+     * Muestra una alerta informativa con un título y mensaje especificados.
+     *
+     * @param titulo  Título de la alerta.
+     * @param mensaje Mensaje a mostrar en el contenido de la alerta.
+     */
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
@@ -210,6 +206,11 @@ public class ejercicioIController {
         alert.showAndWait();
     }
 
+    /**
+     * Filtra las personas en el TableView según el texto ingresado en el
+     * campo de filtrado, mostrando solo las que coincidan parcialmente
+     * en su nombre.
+     */
     public void filtrar() {
         String textoFiltro = filtrarField.getText().toLowerCase();
         ObservableList<Persona> personasFiltradas = FXCollections.observableArrayList();
@@ -219,7 +220,6 @@ public class ejercicioIController {
                 personasFiltradas.add(persona);
             }
         }
-
         personTable.setItems(personasFiltradas);
     }
 }
