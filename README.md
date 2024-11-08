@@ -1,0 +1,1 @@
+Ejercicio que, adapta el anterior para que funcione con una BBDD y se hace multiidioma. Ademas agrega el uso de imagener en los botones y una gran imagen a estilo de logo en el programa. Para finalizar, tambien se le han añadidio estilos a gusto propio para decorar la pantalla principal
