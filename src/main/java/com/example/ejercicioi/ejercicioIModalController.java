@@ -113,20 +113,20 @@ public class ejercicioIModalController {
 
         // Validación de campos
         if (nombre.isEmpty()) {
-            errores.append("El campo 'Nombre' no puede estar vacío.\n");
+            errores.append(bundle.getString("namenotnull")+"\n");
         }
         if (apellidos.isEmpty()) {
-            errores.append("El campo 'Apellidos' no puede estar vacío.\n");
+            errores.append(bundle.getString("surnamenotnull")+"\n");
         }
 
         int edad = -1;
         try {
             edad = Integer.parseInt(edadText);
             if (edad < 0) {
-                errores.append("La edad debe ser un número positivo.\n");
+                errores.append(bundle.getString("agepositive")+"\n");
             }
         } catch (NumberFormatException e) {
-            errores.append("El campo 'Edad' debe ser un número entero válido.\n");
+            errores.append(bundle.getString("agevalid")+"\n");
         }
 
         if (errores.length() > 0) {
@@ -141,22 +141,22 @@ public class ejercicioIModalController {
                 personaAEditar.setApellido(apellidos);
                 personaAEditar.setEdad(edad);
                 daoPersona.modificar(personaAEditar);
-                mostrarInformacion("Persona modificada con éxito.");
+                mostrarInformacion(bundle.getString("modified"));
             } else {
                 // Agregar nueva persona, comprobando duplicados
                 Persona nuevaPersona = new Persona(0, nombre, apellidos, edad);
                 for (Persona persona : personasList) {
                     if (persona.equals(nuevaPersona)) {
-                        mostrarError("Persona duplicada: Ya existe una persona con los mismos datos.");
+                        mostrarError(bundle.getString("duplicatedperson"));
                         return;
                     }
                 }
                 daoPersona.agregar(nuevaPersona);
                 personasList.add(nuevaPersona);
-                mostrarInformacion("Persona agregada con éxito.");
+                mostrarInformacion(bundle.getString("addsuccesfull"));
             }
         } catch (SQLException e) {
-            mostrarError("Error al interactuar con la base de datos: " + e.getMessage());
+            mostrarError(bundle.getString("databaseerror")+ e.getMessage());
         }
 
         cerrarVentana(); // Cierra la ventana al finalizar la operación
@@ -169,7 +169,7 @@ public class ejercicioIModalController {
      */
     private void mostrarInformacion(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Información");
+        alert.setTitle(bundle.getString("information"));
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();

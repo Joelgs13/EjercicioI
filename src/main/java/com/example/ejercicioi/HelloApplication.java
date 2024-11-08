@@ -22,7 +22,7 @@ public class HelloApplication extends Application {
     private static ResourceBundle bundle;
 
     /**
-     * Método que se llama al iniciar la aplicación.
+     * Metodo que se llama al iniciar la aplicación.
      * Carga el archivo FXML, establece el idioma de la interfaz, configura la escena y el escenario, y muestra la ventana principal.
      * La configuración de idioma se carga desde las propiedades de conexión de la base de datos, permitiendo
      * seleccionar el idioma de la interfaz según las preferencias definidas.
@@ -38,7 +38,7 @@ public class HelloApplication extends Application {
         Locale locale = new Locale.Builder().setLanguage(lang).build();
         bundle = ResourceBundle.getBundle("properties/lang", locale);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("EjercicioI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("EjercicioI.fxml"),bundle);
 
         Scene scene = new Scene(fxmlLoader.load(), 800, 500);
         Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/cuaderno.png")));
@@ -53,7 +53,7 @@ public class HelloApplication extends Application {
     }
 
     /**
-     * Método estático que proporciona el recurso de internacionalización (ResourceBundle)
+     * Metodo estático que proporciona el recurso de internacionalización (ResourceBundle)
      * para los controladores que necesitan acceso a las cadenas de texto traducidas.
      *
      * @return El objeto {@link ResourceBundle} con las traducciones de texto según el idioma configurado.
@@ -63,8 +63,8 @@ public class HelloApplication extends Application {
     }
 
     /**
-     * Método principal de la aplicación.
-     * Llama al método {@link #start(Stage)} para iniciar la aplicación JavaFX.
+     * Metodo principal de la aplicación.
+     * Llama al m3etodo {@link #start(Stage)} para iniciar la aplicación JavaFX.
      *
      * @param args Argumentos de línea de comandos (no utilizados).
      */

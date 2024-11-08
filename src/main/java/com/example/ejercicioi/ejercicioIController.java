@@ -49,7 +49,7 @@ public class ejercicioIController {
     @FXML private ResourceBundle bundle;
 
     /**
-     * Método de inicialización que configura los elementos de la interfaz
+     * Metodo de inicialización que configura los elementos de la interfaz
      * y carga las personas desde la base de datos al iniciar la aplicación.
      * También aplica el ResourceBundle para traducciones y configura
      * los tooltips y las imágenes para los botones.
@@ -66,10 +66,10 @@ public class ejercicioIController {
         edadColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getEdad()).asObject());
 
         // Tooltips para los botones
-        agregarButton.setTooltip(new Tooltip("Agregar una nueva persona"));
-        modificarButton.setTooltip(new Tooltip("Modificar una persona"));
-        eliminarButton.setTooltip(new Tooltip("Eliminar una persona"));
-        filtrarField.setTooltip(new Tooltip("Filtrar personas por su nombre"));
+        agregarButton.setTooltip(new Tooltip(bundle.getString("ttaddperson")));
+        modificarButton.setTooltip(new Tooltip(bundle.getString("ttmodifyperson")));
+        eliminarButton.setTooltip(new Tooltip(bundle.getString("tteliminateperson")));
+        filtrarField.setTooltip(new Tooltip(bundle.getString("ttfilterbyperson")));
 
         // Configuración de imágenes en botones
         imagenPersonas.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iconos/contactos.jpeg"))));
@@ -91,6 +91,9 @@ public class ejercicioIController {
         filtrarLabel.setText(bundle.getString("filter_by_name"));
         miModificar.setText(bundle.getString("modify_person"));
         miEliminar.setText(bundle.getString("delete_person"));
+        nombreColumn.setText(bundle.getString("name"));
+        edadColumn.setText(bundle.getString("age"));
+        apellidosColumn.setText(bundle.getString("surname"));
     }
 
     /**
@@ -103,7 +106,7 @@ public class ejercicioIController {
             personasList.setAll(personas);
             personTable.setItems(personasList);
         } catch (SQLException e) {
-            mostrarAlerta("Error", "No se pudieron cargar los datos desde la base de datos: " + e.getMessage());
+            mostrarAlerta("Error", bundle.getString("errdatadownload") + e.getMessage());
         }
     }
 
@@ -132,14 +135,14 @@ public class ejercicioIController {
             modalStage.initOwner(agregarButton.getScene().getWindow());
 
             if (event.getSource() == agregarButton) {
-                modalStage.setTitle("Agregar Persona");
+                modalStage.setTitle(bundle.getString("add_person"));
             } else if (event.getSource() == modificarButton || event.getSource() instanceof MenuItem) {
                 Persona personaSeleccionada = personTable.getSelectionModel().getSelectedItem();
                 if (personaSeleccionada == null) {
-                    mostrarAlerta("No hay ninguna persona seleccionada", "Por favor, seleccione una persona para editar.");
+                    mostrarAlerta(bundle.getString("nopersonselected"), bundle.getString("selecttoedit"));
                     return;
                 }
-                modalStage.setTitle("Editar Persona");
+                modalStage.setTitle(bundle.getString("modify_person"));
                 modalController.setPersonaAEditar(personaSeleccionada);
             }
 
@@ -149,7 +152,7 @@ public class ejercicioIController {
             cargarPersonasDesdeBD();
 
         } catch (IOException e) {
-            mostrarAlerta("Error", "No se pudo abrir la ventana: " + e.getMessage());
+            mostrarAlerta("Error", bundle.getString("notable2open") + e.getMessage());
         }
     }
 
@@ -164,14 +167,14 @@ public class ejercicioIController {
     private void eliminarPersona(ActionEvent event) {
         Persona personaSeleccionada = personTable.getSelectionModel().getSelectedItem();
         if (personaSeleccionada == null) {
-            mostrarAlerta("No hay ninguna persona seleccionada", "Por favor, seleccione una persona para eliminar.");
+            mostrarAlerta(bundle.getString("nopersonselected"), bundle.getString("selecttoedit"));
         } else {
             try {
                 daoPersona.eliminar(personaSeleccionada.getId());
                 personasList.remove(personaSeleccionada);
-                mostrarAlerta("Persona eliminada", "La persona ha sido eliminada con éxito.");
+                mostrarAlerta(bundle.getString("deleted"), bundle.getString("successdeleting"));
             } catch (SQLException e) {
-                mostrarAlerta("Error", "No se pudo eliminar la persona: " + e.getMessage());
+                mostrarAlerta("Error", bundle.getString("notable2delete")+ e.getMessage());
             }
         }
     }
@@ -185,9 +188,9 @@ public class ejercicioIController {
     @FXML
     private void manejarMenuContextual(ActionEvent event) {
         MenuItem menuItem = (MenuItem) event.getSource();
-        if ("Modificar".equals(menuItem.getText())) {
+        if (bundle.getString("modify").equals(menuItem.getText())) {
             abrirVentanaAgregar(new ActionEvent(modificarButton, null));
-        } else if ("Eliminar".equals(menuItem.getText())) {
+        } else if (bundle.getString("delete").equals(menuItem.getText())) {
             eliminarPersona(new ActionEvent(eliminarButton, null));
         }
     }
